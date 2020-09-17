@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import ToursList from './ToursList';
-import { getAllTours } from '../utils/api/tour';
+import dataFetcher from '../hooks/dataFetcher';
+import { getApiUrl } from '../utils/url';
 
 
 export default function Overview() {
 
-    const [tours, setTours] = useState([]);
+    const [{ isLoading, response, error }, setUrl] = dataFetcher(getApiUrl('tours'));
 
+    const tours = response && response.data.data.tours || [];
 
-    useEffect(() => {
-
-        async function fetchData() {
-            const tours = await getAllTours();
-
-            setTours(tours);
-        }
-
-        fetchData();
-    }, []);
     return (
-        <main class='main'>
+        <main className='main'>
             <div className="card-container">
-                <ToursList tours={tours} />
+                {isLoading ? <h1>Loading...</h1> : <ToursList tours={tours} />}
             </div>
         </main>
     )
