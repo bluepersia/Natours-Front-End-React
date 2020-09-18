@@ -1,4 +1,4 @@
-import { getApiUrl } from '../url';
+import { getApiUrl } from './url';
 import request from '../request';
 
 function toursUrl(route = '') {

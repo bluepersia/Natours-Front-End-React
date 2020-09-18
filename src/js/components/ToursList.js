@@ -1,9 +1,8 @@
 import React from 'react';
-import { getTourImageUrl, getIconUrl } from '../utils/url';
+import { getTourImageUrl, getIconUrl } from '../utils/api/url';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { monthName } from '../utils/date';
-
+import { getReadable } from '../utils/date';
 
 
 export default function ToursList({ tours = [] }) {
@@ -14,7 +13,7 @@ export default function ToursList({ tours = [] }) {
 
 
 
-function Tour({ name, imageCover, difficulty, duration, summary, startLocation, startDates, locations, maxGroupSize, price, ratingsAverage, ratingsQuantity, slug }) {
+function Tour({ name, imageCover, difficulty, duration, summary, startLocation, startDates, locations, maxGroupSize, price, ratingsAverage, ratingsQuantity, id }) {
 
     imageCover = getTourImageUrl(imageCover);
 
@@ -44,7 +43,7 @@ function Tour({ name, imageCover, difficulty, duration, summary, startLocation, 
                     {summary}
                 </p>
                 <CardData icon='map-pin' text={startLocation.description} />
-                <CardData icon='calendar' text={`${monthName(startDate.getMonth())} ${startDate.getFullYear()}`} />
+                <CardData icon='calendar' text={getReadable(startDate)} />
                 <CardData icon='flag' text={`${locations.length} stops`} />
                 <CardData icon='user' text={`${maxGroupSize} people`} />
             </div >
@@ -52,7 +51,7 @@ function Tour({ name, imageCover, difficulty, duration, summary, startLocation, 
             <div className="card__footer">
                 <FooterParagraph value={`$${price}`} text='per person' />
                 <FooterParagraph value={ratingsAverage} text={`rating (${ratingsQuantity})`} />
-                <Link to={`/tour/${slug}`} className="btn btn--green btn--small">Details</Link>
+                <Link to={`/tour/${id}`} className="btn btn--green btn--small">Details</Link>
             </div>
         </div >
     )

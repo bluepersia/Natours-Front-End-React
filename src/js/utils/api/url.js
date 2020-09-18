@@ -32,4 +32,4 @@ function getApiUrl(path) {
 }
 
 
-export { url, apiUrl, getUrl, getApiUrl, getImageUrl, getTourImageUrl, getIconUrl };
+export { url, apiUrl, getUrl, getApiUrl, getImageUrl, getTourImageUrl, getUserImageUrl, getIconUrl };

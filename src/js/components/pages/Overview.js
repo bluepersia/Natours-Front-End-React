@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ToursList from '../ToursList';
 import DataFetcher from '../DataFetcher';
-import { getApiUrl } from '../../utils/url';
+import { getApiUrl } from '../../utils/api/url';
 
 
 export default function Overview() {

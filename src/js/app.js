@@ -37,7 +37,7 @@ function App() {
             </header>
 
             <Switch>
-                <Route path='/tour/:slug'><Tour /></Route>
+                <Route path='/tour/:id'><Tour /></Route>
                 <Route path='/'><Overview /></Route>
             </Switch>
 
