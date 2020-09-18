@@ -31,5 +31,10 @@ function getApiUrl(path) {
     return `${apiUrl}${path}`;
 }
 
+function getUserUrl(path) {
+    return getApiUrl(`users/${path}`);
+}
 
-export { url, apiUrl, getUrl, getApiUrl, getImageUrl, getTourImageUrl, getUserImageUrl, getIconUrl };
+
+
+export { url, apiUrl, getUrl, getApiUrl, getImageUrl, getTourImageUrl, getUserImageUrl, getIconUrl, getUserUrl };

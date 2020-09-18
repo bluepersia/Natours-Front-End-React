@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import useValidator from '../../../hooks/useValidator';
+import useValidator from './useValidator';
 
 export default function ValidationField({ name, allValues, validation = null, render }) {
 

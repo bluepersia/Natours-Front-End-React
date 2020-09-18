@@ -46,7 +46,6 @@ export default function (msg, name, setting) {
             break;
     }
 
-    console.log(msg);
     if (msg)
         msg = msg[0].toUpperCase() + msg.slice(1);
 

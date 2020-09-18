@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import useForm from '../../../hooks/useForm';
+import useForm from './useForm';
 import replaceAllChildren from '../../../utils/replaceAllChildren';
 import ValidationField from './ValidationField';
 import validationTranslator from './validationTranslator';
@@ -12,6 +12,7 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
 
         let nextProps = { ...props };
 
+        const isComponent = typeof type == 'function'
 
         if (props.hasOwnProperty('name')) {
 
@@ -33,20 +34,24 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
 
 
             }
-            else {
-                if (props.hasOwnProperty('value'))
-                    nextProps.value = currentVal;
+            else if (isComponent) {
 
-                if (props.hasOwnProperty('validation') && thisValidate)
+                nextProps.value = currentVal;
+
+                if (thisValidate)
                     nextProps.validation = thisValidate;
 
 
             }
+
+
         }
 
 
-        if (props.hasOwnProperty('allValues'))
+        if (isComponent)
             nextProps.allValues = input;
+
+
 
 
 
@@ -63,17 +68,22 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
     )
 }
 
+Form.Group = function ({ extraClass = '', children }) {
+    return <div className={`form-group ${extraClass}`}>
+        {children}
+    </div>
+}
 
-Form.Field = function ({ extraClass = '', label, children, name, validation = null, allValues = {} }) {
+Form.Field = function ({ groupClass = '', label, children, name, validation = null, allValues = {} }) {
 
-    children = React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, className: 'form__input' })));
+    children = React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, name, className: 'form__input' })));
 
     return (
-        <div className={`form-group ${extraClass}`}>
+        <Form.Group extraClass={groupClass}>
             <label className='form__label' htmlFor={name}>{label}</label>
             {children}
             <Form.ValidationMsg name={name} validation={validation} allValues={allValues} />
-        </div>
+        </Form.Group>
     )
 }
 
@@ -84,4 +94,10 @@ Form.ValidationMsg = function ({ name, validation, allValues = {} }) {
         <h2 className='red'>{validationTranslator(msg, name, validation[msg])}</h2>
 
     )} />;
+}
+
+
+
+Form.Button = function ({ groupClass = '', btnClass = '', children }) {
+    return <Form.Group extraClass={groupClass}><button className={`btn btn--green ${btnClass}`}>{children}</button></Form.Group>;
 }

@@ -3,6 +3,7 @@ import React from 'react';
 
 export default function replaceAllChildren(children, cb) {
     return React.Children.map(children, child => {
+
         let childProps = child.props;
         if (React.isValidElement(child)) {
             childProps = cb(child);

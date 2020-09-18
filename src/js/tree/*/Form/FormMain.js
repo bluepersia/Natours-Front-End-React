@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './Form';
+import Form from '.';
 
 export default function FormMain({ heading, children, ...restProps }) {
     return (

@@ -16,9 +16,9 @@ export default function TourPage() {
 
 
     return (
-        <DataFetcher url={getApiUrl(`tours/${id}?populate=guides[photo|role|name],reviews[user|review|rating].user[photo|name]`)} render={data => {
-            return data && <Tour {...data.data.tour} />
-        }} />
+        <DataFetcher url={getApiUrl(`tours/${id}?populate=guides[photo|role|name],reviews[user|review|rating].user[photo|name]`)}>
+            {data => data && <Tour {...data.data.tour} />}
+        </DataFetcher>
     )
 }
 

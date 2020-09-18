@@ -1,6 +1,7 @@
 import React from 'react';
 import FormMain from '../*/Form/FormMain';
-import Form from '../*/Form/Form';
+import Form from '../*/Form';
+import { login } from '../../utils/api/authentication';
 
 
 export default function Login() {
@@ -16,17 +17,21 @@ export default function Login() {
         }
     }
 
-    return (
-        <FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={() => console.log('Submitted')} validation={validation}>
+    function onSubmit(e, { email, password }) {
+        login(email, password);
+    }
 
-            <Form.Field label='Email Address' name='email' validation={null} allValues={{}}>
+    return (
+        <FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={onSubmit} validation={validation}>
+
+            <Form.Field label='Email Address' name='email'>
                 <input name='email' id="email" type="email" placeholder="you@example.com" />
             </Form.Field>
 
-            <Form.Field extraClass='ma-bt-md' label='Password' name='password' validation={null} allValues={{}}>
+            <Form.Field groupClass='ma-bt-md' label='Password' name='password'>
                 <input name='password' id="password" type="password" placeholder="********" />
             </Form.Field>
-            <div className="form__group"><button className="btn btn--green">Login</button></div>
+            <Form.Button>Login</Form.Button>
         </FormMain>
     )
 }

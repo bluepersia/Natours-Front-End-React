@@ -1,5 +1,5 @@
 import { useReducer, useState, useEffect } from 'react';
-import request from '../utils/request';
+import request from '../../../utils/request';
 
 
 export default function dataFetcher(defaultUrl = '') {
