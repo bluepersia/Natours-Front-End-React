@@ -1,6 +1,6 @@
 import React from 'React';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Overview from './components/Overview';
+import Overview from './components/pages/Overview';
 
 
 function App() {

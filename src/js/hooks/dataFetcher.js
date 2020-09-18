@@ -37,20 +37,16 @@ export default function dataFetcher(defaultUrl = '') {
     useEffect(() => {
         let isCurrent = true;
 
-        console.log('yes');
 
         async function fetchData() {
-            try {
-                dispatch({ type: "LOADING" });
-                const response = await request(url, 'GET');
+            dispatch({ type: "LOADING" });
+            const response = await request(url, 'GET');
 
-                if (isCurrent)
-                    dispatch({ type: "RESPONSE", payload: response });
-            }
-            catch (err) {
-                if (isCurrent)
-                    dispatch({ type: "ERROR", payload: err });
-            }
+            if (response.status)
+                dispatch({ type: "RESPONSE", payload: response });
+            else
+                dispatch({ type: "ERROR", payload: response });
+
         }
 
         fetchData();

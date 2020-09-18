@@ -5,13 +5,9 @@ import PropTypes from 'prop-types';
 
 
 
-export default function ToursList({ tours }) {
-    return tours.map(tour => <Tour key={tour.id} {...tour} />);
-}
+export default function ToursList({ tours = [] }) {
 
-ToursList.propTypes =
-{
-    tours: PropTypes.arrayOf(PropTypes.object).isRequired
+    return tours.map(tour => <Tour key={tour.id} {...tour} />);
 }
 
 
