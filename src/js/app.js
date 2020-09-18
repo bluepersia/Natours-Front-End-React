@@ -1,6 +1,7 @@
 import React from 'React';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Overview from './components/pages/Overview';
+import Tour from './components/pages/Tour';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             </header>
 
             <Switch>
+                <Route path='/tour/:slug'><Tour /></Route>
                 <Route path='/'><Overview /></Route>
             </Switch>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { getTourImageUrl, getIconUrl } from '../utils/url';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { monthName } from '../utils/date';
 
 
 
@@ -16,6 +17,9 @@ export default function ToursList({ tours = [] }) {
 function Tour({ name, imageCover, difficulty, duration, summary, startLocation, startDates, locations, maxGroupSize, price, ratingsAverage, ratingsQuantity, slug }) {
 
     imageCover = getTourImageUrl(imageCover);
+
+
+    const startDate = new Date(startDates[0].date);
 
     return (
         <div className="card">
@@ -39,8 +43,8 @@ function Tour({ name, imageCover, difficulty, duration, summary, startLocation, 
                 <p className="card__text">
                     {summary}
                 </p>
-                <CardData icon='pin' text={startLocation.description} />
-                <CardData icon='calendar' text={startDates[0].date.toLocaleString('en-us', { year: 'numeric', month: 'long' })} />
+                <CardData icon='map-pin' text={startLocation.description} />
+                <CardData icon='calendar' text={`${monthName(startDate.getMonth())} ${startDate.getFullYear()}`} />
                 <CardData icon='flag' text={`${locations.length} stops`} />
                 <CardData icon='user' text={`${maxGroupSize} people`} />
             </div >
