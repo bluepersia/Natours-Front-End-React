@@ -3,10 +3,12 @@ import { getMe } from '../../../utils/api/user';
 import setAuthorizationToken from '../../../utils/authorizationToken';
 
 
-const { Provider, Consumer } = createContext();
+const GlobalContext = createContext();
+const { Provider, Consumer } = GlobalContext;
 
 function GlobalContextProvider({ children }) {
     const [user, setUser] = useState(null);
+
 
     useEffect(() => {
 
@@ -39,7 +41,7 @@ function GlobalContextProvider({ children }) {
         });
 
 
-        document.addEventListener('loggedOut', () => setUser(null));
+        document.addEventListener('loggedOut', () => { setUser(null); setAuthorizationToken(undefined); });
     }, []);
 
     return (
@@ -51,4 +53,4 @@ function GlobalContextProvider({ children }) {
 
 
 
-export { GlobalContextProvider, Consumer as GlobalContextConsumer };
+export { GlobalContextProvider, Consumer as GlobalContextConsumer, GlobalContext };

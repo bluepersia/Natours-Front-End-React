@@ -80,12 +80,19 @@ Form.Field = function ({ label, children, name, validation = null, allValues = {
 
     return (
         <>
-            <label className='form__label' htmlFor={name}>{label}</label>
-            {children}
+            <Form.Label>
+                {label}
+                {children}
+            </Form.Label>
             <Form.ValidationMsg name={name} validation={validation} allValues={allValues} />
         </>
 
     )
+}
+
+
+Form.Label = function ({ children, ...restProps }) {
+    return <label className='form__label' {...restProps}>{children}</label>
 }
 
 

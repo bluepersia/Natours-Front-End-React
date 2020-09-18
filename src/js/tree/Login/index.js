@@ -2,9 +2,12 @@ import React from 'react';
 import FormMain from '../*/Form/FormMain';
 import Form from '../*/Form';
 import { login } from '../../utils/api/authentication';
-
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Login() {
+
+    const history = useHistory();
+    const location = useLocation();
 
     const validation = {
         email: {
@@ -17,8 +20,12 @@ export default function Login() {
         }
     }
 
-    function onSubmit(e, { email, password }) {
-        login(email, password);
+    async function onSubmit(e, { email, password }) {
+        await login(email, password);
+
+        const { from } = location.state || { from: '/' };
+
+        history.replace(from);
     }
 
     return (

@@ -8,5 +8,12 @@ async function login(email, password) {
         document.dispatchEvent(new Event('loggedIn'));
 }
 
+async function logout() {
+    const response = await request(getUserUrl('logout'), 'GET');
 
-export { login }
+    if (response.status)
+        document.dispatchEvent(new Event('loggedOut'));
+}
+
+
+export { login, logout }
