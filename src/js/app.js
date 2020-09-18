@@ -1,7 +1,8 @@
 import React from 'React';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Overview from './components/pages/Overview';
-import Tour from './components/pages/Tour';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Overview from './components/Overview';
+import Tour from './components/Tour';
+import Login from './components/Login';
 
 
 function App() {
@@ -32,13 +33,20 @@ function App() {
                         <img src="img/user.jpg" alt="User photo" className="nav__user-img" />
                         <span>Jonas</span>
                     </a>
-
+                    <Link className="nav__el" to="/login">Log in</Link>
+                    <a className="nav__el nav__el--cta" href="/signup">Sign up</a>
                 </nav>
             </header>
 
             <Switch>
                 <Route path='/tour/:id'><Tour /></Route>
-                <Route path='/'><Overview /></Route>
+
+                <main className='main'>
+                    <Switch>
+                        <Route path='/login'><Login /></Route>
+                        <Route path='/'><Overview /></Route>
+                    </Switch>
+                </main>
             </Switch>
 
             <div className="footer">

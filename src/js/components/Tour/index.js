@@ -8,7 +8,7 @@ import getIcon from '../../utils/getIcon';
 import { getReadable } from '../../utils/date';
 import capitalize from '../../utils/capitalize';
 
-import DataFetcher from '../DataFetcher';
+import DataFetcher from '../*/DataFetcher';
 
 export default function TourPage() {
 

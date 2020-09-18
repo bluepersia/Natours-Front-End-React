@@ -1,8 +1,8 @@
 import React from 'react';
-import { getTourImageUrl, getIconUrl } from '../utils/api/url';
+import { getTourImageUrl, getIconUrl } from '../../utils/api/url';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getReadable } from '../utils/date';
+import { getReadable } from '../../utils/date';
 
 
 export default function ToursList({ tours = [] }) {
