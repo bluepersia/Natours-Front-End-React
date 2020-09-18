@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { getUserUrl } from '../../../utils/api/url';
+import { getMe } from '../../../utils/api/user';
+import setAuthorizationToken from '../../../utils/authorizationToken';
 
 
 const { Provider, Consumer } = createContext();
@@ -12,9 +13,10 @@ function GlobalContextProvider({ children }) {
         async function fetchData() {
 
             try {
-                const response = await fetch(getUserUrl('me'));
+                const user = await getMe();
 
-                setUser(response.data.data.user);
+                if (user)
+                    setUser(user);
             }
             catch (err) {
 
@@ -29,8 +31,10 @@ function GlobalContextProvider({ children }) {
             const { data } = detail
 
             if (data) {
-                if (data.data.user && data.token)
+                if (data.data.user && data.token) {
                     setUser(data.data.user);
+                    setAuthorizationToken(data.token);
+                }
             }
         });
 

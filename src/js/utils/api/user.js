@@ -2,7 +2,7 @@ import { getUserUrl } from './url';
 import request from '../request';
 
 async function getMe() {
-    const response = await request(getUserUrl('me'), 'GET');
+    const response = await request(getUserUrl('me'), 'GET', {}, true);
 
     if (response.status)
         return response.data.data.user;
