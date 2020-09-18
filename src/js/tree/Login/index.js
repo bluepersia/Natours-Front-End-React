@@ -24,14 +24,20 @@ export default function Login() {
     return (
         <FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={onSubmit} validation={validation}>
 
-            <Form.Field label='Email Address' name='email'>
-                <input name='email' id="email" type="email" placeholder="you@example.com" />
-            </Form.Field>
+            <Form.Group>
+                <Form.Field label='Email Address' name='email'>
+                    <input name='email' id="email" type="email" placeholder="you@example.com" />
+                </Form.Field>
+            </Form.Group>
 
-            <Form.Field groupClass='ma-bt-md' label='Password' name='password'>
-                <input name='password' id="password" type="password" placeholder="********" />
-            </Form.Field>
-            <Form.Button>Login</Form.Button>
+            <Form.Group extraClass='ma-bt-md'>
+                <Form.Field label='Password' name='password'>
+                    <input name='password' id="password" type="password" placeholder="********" />
+                </Form.Field>
+            </Form.Group>
+            <Form.Group>
+                <Form.Button>Login</Form.Button>
+            </Form.Group>
         </FormMain>
     )
 }

@@ -68,22 +68,23 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
     )
 }
 
-Form.Group = function ({ extraClass = '', children }) {
-    return <div className={`form-group ${extraClass}`}>
+Form.Group = function ({ extraClass = '', children, ...restProps }) {
+    return <div className={`form-group ${extraClass}`} {...restProps}>
         {children}
     </div>
 }
 
-Form.Field = function ({ groupClass = '', label, children, name, validation = null, allValues = {} }) {
+Form.Field = function ({ label, children, name, validation = null, allValues = {} }) {
 
     children = React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, name, className: 'form__input' })));
 
     return (
-        <Form.Group extraClass={groupClass}>
+        <>
             <label className='form__label' htmlFor={name}>{label}</label>
             {children}
             <Form.ValidationMsg name={name} validation={validation} allValues={allValues} />
-        </Form.Group>
+        </>
+
     )
 }
 
@@ -98,6 +99,6 @@ Form.ValidationMsg = function ({ name, validation, allValues = {} }) {
 
 
 
-Form.Button = function ({ groupClass = '', btnClass = '', children }) {
-    return <Form.Group extraClass={groupClass}><button className={`btn btn--green ${btnClass}`}>{children}</button></Form.Group>;
+Form.Button = function ({ btnClass = '', children, ...restProps }) {
+    return <button className={`btn btn--green ${btnClass}`} {...restProps}>{children}</button>;
 }
