@@ -28,9 +28,11 @@ export default function validate(val, allValues, validation) {
     if (!validation)
         return '';
 
-    for (const [validatorKey, validatorSetting] of Object.entries(validation))
+    for (const [validatorKey, validatorSetting] of Object.entries(validation)) {
         if (!validateSingle(val, allValues, validators[validatorKey], validatorSetting))
-            return validatorKey;
+            return [validatorKey, val, validatorSetting];
+
+    }
 
 
     return '';

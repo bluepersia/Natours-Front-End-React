@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export const FormContext = createContext();
 const { Provider, Consumer } = FormContext;
@@ -55,15 +55,23 @@ Form.TextArea = function ({ ...restProps }) {
 
 
 Form.useValidation = function (name, validator) {
+
     const { input, validation } = useContext(FormContext);
 
-    const [touched, setTouched] = useContext(FormContext);
+    const [touched, setTouched] = useState(false);
+
+    const [err, setErr] = useState(['']);
 
     useEffect(() => {
         setTouched(true);
-    }, input[name]);
 
-    return touched ? validator(input[name], input, validation) : '';
+        if (touched)
+            setErr(validator(input[name], input, validation[name]));
+
+    }, [input[name]]);
+
+
+    return err;
 }
 
 

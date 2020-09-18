@@ -29,30 +29,26 @@ export default function Login() {
     }
 
     return (
-        <Form defaultValues={{ name: '', gender: 'male' }}>
-            <Form.Input name='name' />
-            <Form.Input type='radio' name='gender' value='male' />
-            <Form.Input type='radio' name='gender' value='female' />
-        </Form>
+        <FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={onSubmit} validation={validation}>
+
+            <Form.Group>
+                <Form.Field label='Email Address' name='email'>
+                    <Form.Input type="email" placeholder="you@example.com" />
+                </Form.Field>
+            </Form.Group>
+
+            <Form.Group extraClass='ma-bt-md'>
+                <Form.Field label='Password' name='password'>
+                    <Form.Input type="password" placeholder="********" />
+                </Form.Field>
+            </Form.Group>
+            <Form.Group>
+                <Form.Button>Login</Form.Button>
+            </Form.Group>
+        </FormMain>
     )
 }
 
 /*
-<FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={onSubmit} validation={validation}>
 
-<Form.Group>
-    <Form.Field label='Email Address' name='email'>
-        <input name='email' id="email" type="email" placeholder="you@example.com" />
-    </Form.Field>
-</Form.Group>
-
-<Form.Group extraClass='ma-bt-md'>
-    <Form.Field label='Password' name='password'>
-        <input name='password' id="password" type="password" placeholder="********" />
-    </Form.Field>
-</Form.Group>
-<Form.Group>
-    <Form.Button>Login</Form.Button>
-</Form.Group>
-</FormMain>
 */
