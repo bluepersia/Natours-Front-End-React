@@ -18,9 +18,14 @@ export default function Login() {
 
     return (
         <FormMain heading='Log into your account' data={{ email: '', password: '' }} onSubmit={() => console.log('Submitted')} validation={validation}>
-            <div className="form__group"><label className="form__label" htmlFor="email">Email address</label><input name='email' className="form__input" id="email" type="email" placeholder="you@example.com" /></div>
-            <Form.ValidationMsg name='email' />
-            <div className="form__group ma-bt-md"><label className="form__label" htmlFor="password">Password</label><input name='password' className="form__input" id="password" type="password" placeholder="••••••••" /></div>
+
+            <Form.Field label='Email Address' name='email' validation={null} allValues={{}}>
+                <input name='email' id="email" type="email" placeholder="you@example.com" />
+            </Form.Field>
+
+            <Form.Field extraClass='ma-bt-md' label='Password' name='password' validation={null} allValues={{}}>
+                <input name='password' id="password" type="password" placeholder="********" />
+            </Form.Field>
             <div className="form__group"><button className="btn btn--green">Login</button></div>
         </FormMain>
     )

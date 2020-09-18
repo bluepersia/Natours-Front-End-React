@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import useForm from '../../../hooks/useForm';
 import replaceAllChildren from '../../../utils/replaceAllChildren';
 import ValidationField from './ValidationField';
+import validationTranslator from './validationTranslator';
 
 
 export default function Form({ data = {}, onSubmit, children, validation = {}, ...restProps }) {
@@ -11,30 +12,43 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
 
         let nextProps = { ...props };
 
-        if (type == 'input' || type == 'textarea' || type == 'select') {
 
-            const currentVal = input[props.name];
+        if (props.hasOwnProperty('name')) {
 
-            const valKey = nextProps.type == 'checkbox' || nextProps.type == 'radio' ? 'checked' : 'value';
+            const { name } = props;
 
-            nextProps[valKey] = nextProps.type == 'radio' ? currentVal == nextProps.value : currentVal;
+            const currentVal = input[name];
+            const thisValidate = validation[name];
 
-            nextProps.onChange = handleInputChange;
+            if (type == 'input' || type == 'textarea' || type == 'select') {
 
-            const validate = validation[props.name];
-            if (validate)
-                nextProps = { ...nextProps, ...validate };
+                const valKey = nextProps.type == 'checkbox' || nextProps.type == 'radio' ? 'checked' : 'value';
+
+                nextProps[valKey] = nextProps.type == 'radio' ? currentVal == nextProps.value : currentVal;
+
+                nextProps.onChange = handleInputChange;
+
+                if (thisValidate)
+                    nextProps = { ...nextProps, ...thisValidate };
 
 
+            }
+            else {
+                if (props.hasOwnProperty('value'))
+                    nextProps.value = currentVal;
+
+                if (props.hasOwnProperty('validation') && thisValidate)
+                    nextProps.validation = thisValidate;
+
+
+            }
         }
-        else if (props.hasOwnProperty('validation') && props.hasOwnProperty('name')) {
-
-            if (validation)
-                nextProps.validation = validation[props.name];
 
 
+        if (props.hasOwnProperty('allValues'))
             nextProps.allValues = input;
-        }
+
+
 
 
 
@@ -50,21 +64,24 @@ export default function Form({ data = {}, onSubmit, children, validation = {}, .
 }
 
 
-Form.Field = function ({ extraClass = '', label, children, name, htmlFor }) {
+Form.Field = function ({ extraClass = '', label, children, name, validation = null, allValues = {} }) {
+
+    children = React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, className: 'form__input' })));
+
     return (
         <div className={`form-group ${extraClass}`}>
-            <label className='form__label' htmlFor={htmlFor}>{label}</label>
+            <label className='form__label' htmlFor={name}>{label}</label>
             {children}
-            <Form.ValidationMsg name={name} validation={null} />
+            <Form.ValidationMsg name={name} validation={validation} allValues={allValues} />
         </div>
     )
 }
 
 
-Form.ValidationMsg = function (props) {
-    return <ValidationField {...props} render={msg => (
+Form.ValidationMsg = function ({ name, validation, allValues = {} }) {
+    return <ValidationField name={name} validation={validation} allValues={allValues} render={msg => (
 
-        <p>{msg}</p>
+        <h2 className='red'>{validationTranslator(msg, name, validation[msg])}</h2>
 
     )} />;
 }

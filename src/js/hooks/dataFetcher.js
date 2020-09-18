@@ -42,7 +42,7 @@ export default function dataFetcher(defaultUrl = '') {
             dispatch({ type: "LOADING" });
             const response = await request(url, 'GET');
 
-            if (response.status)
+            if (isCurrent && response.status)
                 dispatch({ type: "RESPONSE", payload: response });
             else
                 dispatch({ type: "ERROR", payload: response });
