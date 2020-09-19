@@ -1,8 +1,10 @@
 import React from 'react';
 import FormMain from '../*/Form/FormMain';
-import Form from '../*/Form/Form';
 import { login } from '../../utils/api/authentication';
 import { useHistory, useLocation } from 'react-router-dom';
+
+const { Form } = FormMain;
+const { Validation } = Form;
 
 export default function Login() {
 
@@ -10,22 +12,20 @@ export default function Login() {
     const location = useLocation();
 
     const validation = {
-        email: {
-            required: true,
-            email: ''
-        },
-        password: {
-            required: true,
-            minLength: 8
-        }
+        email: [Validation.IsRequired, Validation.IsEmail],
+        password: [Validation.IsRequired, Validation.MinLength(8)]
     }
 
     async function onSubmit(e, { email, password }) {
-        await login(email, password);
+        const response = await login(email, password);
 
-        const { from } = location.state || { from: '/' };
+        if (response.status) {
 
-        history.replace(from);
+            const { from } = location.state || { from: '/' };
+
+            history.replace(from);
+
+        }
     }
 
     return (

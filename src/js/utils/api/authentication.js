@@ -6,6 +6,8 @@ async function login(email, password) {
 
     if (response.status)
         document.dispatchEvent(new Event('loggedIn'));
+
+    return response;
 }
 
 async function logout() {

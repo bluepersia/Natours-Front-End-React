@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export const FormContext = createContext();
+const FormContext = Form.FormContext = createContext();
 const { Provider, Consumer } = FormContext;
 
 export function FormProvider({ defaultValues = {}, validation = {}, children }) {
@@ -12,7 +12,13 @@ export function FormProvider({ defaultValues = {}, validation = {}, children }) 
 
 export default function Form({ defaultValues = {}, validation = {}, onSubmit, children, ...restProps }) {
 
-    return <FormProvider defaultValues={defaultValues} validation={validation}>{input => <form onSubmit={e => onSubmit(e, input)} {...restProps}>{children}</form>}</FormProvider>
+    function handleSubmit(e, values) {
+        if (onSubmit) {
+            e.preventDefault();
+            onSubmit(e, values);
+        }
+    }
+    return <FormProvider defaultValues={defaultValues} validation={validation}>{input => <form onSubmit={e => handleSubmit(e, input)} {...restProps}>{children}</form>}</FormProvider>
 }
 
 
@@ -26,37 +32,47 @@ function useInput(name) {
         setInput(prevInput => ({ ...prevInput, [name]: value }));
     }
 
-    return [input[name], validation[name], handleInputChange];
+    const validators = validation[name];
+
+    return [input[name], validators ? validators.reduce((acc, { inputProps }) => inputProps ? ({ ...acc, ...inputProps }) : acc, {}) : {}, handleInputChange];
 }
 
 
 Form.Input = function ({ type = 'text', name, value, ...restProps }) {
-    const [inputValue, validation, handleInputChange] = useInput();
+    const [inputValue, validationProps, handleInputChange] = useInput(name);
 
-    if (type == 'checkbox')
-        return <input type='checkbox' name={name} checked={inputValue} onChange={handleInputChange} {...restProps} {...validation}></input>
-    else if (type == 'radio')
-        return <input type='radio' name={name} checked={inputValue == value} value={value} onChange={handleInputChange} {...restProps}  {...validation} />
 
-    return <input type={type} name={name} value={inputValue} onChange={handleInputChange} {...restProps}  {...validation} />
+    return <Form.InputContextConsumer name={name}>
+        {type == 'checkbox' ?
+            <input type='checkbox' checked={inputValue} onChange={handleInputChange} {...restProps} {...validationProps}></input>
+            : type == 'radio' ?
+                <input type='radio' checked={inputValue == value} value={value} onChange={handleInputChange} {...restProps}  {...validationProps} />
+                :
+                <input type={type} value={inputValue} onChange={handleInputChange} {...restProps}  {...validationProps} />}</Form.InputContextConsumer>
+
+
 }
 
-Form.Select = function ({ children, ...restProps }) {
-    const [inputValue, validation, handleInputChange] = useInput();
+Form.Select = function ({ children, name, ...restProps }) {
+    const [inputValue, validationProps, handleInputChange] = useInput(name);
 
-    return <select {...restProps} value={inputValue} onChange={handleInputChange}  {...validation}>{children}</select>
+    return <Form.InputContextConsumer name={name}><select {...restProps} value={inputValue} onChange={handleInputChange}  {...validationProps}>{children}</select></Form.InputContextConsumer>
 }
 
-Form.TextArea = function ({ ...restProps }) {
-    const [inputValue, validation, handleInputChange] = useInput();
+Form.TextArea = function ({ name, ...restProps }) {
+    const [inputValue, validationProps, handleInputChange] = useInput(name);
 
-    return <textarea {...restProps} value={inputValue} onChange={handleInputChange}  {...validation} />;
+    return <Form.InputContextConsumer name={name}><textarea {...restProps} value={inputValue} onChange={handleInputChange}  {...validationProps} /></Form.InputContextConsumer>;
 }
 
 
-Form.useValidation = function (name, validator) {
+Form.useValidation = function (name) {
+
+    name = name || useContext(InputContext);
 
     const { input, validation } = useContext(FormContext);
+    const val = input[name];
+    const validators = validation[name];
 
     const [touched, setTouched] = useState(false);
 
@@ -65,14 +81,53 @@ Form.useValidation = function (name, validator) {
     useEffect(() => {
         setTouched(true);
 
-        if (touched)
-            setErr(validator(input[name], input, validation[name]));
+        if (touched) {
+            setErr(validate());
+        }
 
     }, [input[name]]);
 
+    function validate() {
+
+        if (!validators)
+            return '';
+
+        for (const validator of validators) {
+            const msg = validator.call(input, val);
+
+            if (msg)
+                return msg;
+        }
+
+        return '';
+    }
 
     return err;
 }
+
+
+const InputContext = Form.InputContext = createContext();
+
+Form.InputContextProvider = function ({ name, children }) {
+    return <InputContext.Provider value={name}>{children}</InputContext.Provider>
+}
+
+
+Form.InputContextConsumer = function ({ name, children }) {
+    name = name || useContext(InputContext);
+
+    return React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, name })));
+}
+
+
+Form.InputContextConsumerSecondary = function ({ name, children }) {
+    name = name || useContext(InputContext);
+
+    return children(name);
+}
+
+
+
 
 
 

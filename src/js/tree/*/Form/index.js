@@ -1,10 +1,16 @@
 import React from 'react';
-import validationTranslator from './validationTranslator';
-import validate from './validation';
-import Form from './Form';
+import FormBase from './Form';
+import * as validator from './validation/validator';
 
 
-export default Form;
+export default function Form({ children, ...props }) {
+    return <FormBase {...props}>{children}</FormBase>;
+}
+
+Form.Base = FormBase;
+
+
+Form.Validation = validator;
 
 Form.Group = function ({ extraClass = '', children, ...restProps }) {
     return <div className={`form-group ${extraClass}`} {...restProps}>
@@ -14,18 +20,29 @@ Form.Group = function ({ extraClass = '', children, ...restProps }) {
 
 Form.Field = function ({ label, children, name }) {
 
-    children = React.Children.map(children, child => React.cloneElement(child, ({ ...child.props, name, className: 'form__input' })));
 
     return (
-        <>
+        <FormBase.InputContextProvider name={name}>
             <Form.Label>
                 {label}
                 {children}
             </Form.Label>
-            <Form.ValidationMsg name={name} />
-        </>
+            <Form.ValidationMsg />
+        </FormBase.InputContextProvider>
 
     )
+}
+
+Form.Input = function ({ ...props }) {
+    return <FormBase.Input className='form__input' {...props} />
+}
+
+Form.TextArea = function ({ ...props }) {
+    return <FormBase.TextArea className='form__input' {...props} />
+}
+
+Form.Select = function ({ ...props }) {
+    return <FormBase.Select className='form__input' {...props} />
 }
 
 
@@ -36,9 +53,9 @@ Form.Label = function ({ children, ...restProps }) {
 
 Form.ValidationMsg = function ({ name }) {
 
-    const [errKey, val, setting] = Form.useValidation(name, validate);
+    const errMsg = FormBase.useValidation(name);
 
-    return <h2 className='red'>{validationTranslator(errKey, name, setting)}</h2>
+    return <h2 className='red'>{errMsg}</h2>;
 
 }
 

@@ -1,5 +1,8 @@
 import React from 'react';
-import Form from '.';
+import Form from './';
+
+
+
 
 export default function FormMain({ heading, children, ...restProps }) {
     return (
@@ -11,3 +14,6 @@ export default function FormMain({ heading, children, ...restProps }) {
         </div>
     )
 }
+
+
+FormMain.Form = Form;

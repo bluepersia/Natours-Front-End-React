@@ -3,7 +3,7 @@ import dataFetcher from './useDataFetcher';
 
 
 export default function DataFetcher({ url = '', children }) {
-    const [{ isLoading, response, error }, setUrl] = dataFetcher(url);
+    const [{ isLoading, response, error }] = dataFetcher(url);
 
 
     return (
